@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Akuarium Ceria 🐠</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🐠</text></svg>">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#082631;--sea:#0b4a5e;--foam:#7fe0c8;--sand:#f6dfa4;--coral:#ff6b57;--paper:#fff8e8;--line:#082631}
+*{box-sizing:border-box}
+body{margin:0;font-family:'Baloo 2',system-ui,sans-serif;background:var(--sea);color:var(--ink);min-height:100vh;
+background-image:radial-gradient(circle at 20% 10%,#12708a 0,transparent 40%),radial-gradient(circle at 90% 80%,#0f5c73 0,transparent 45%)}
+header{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;padding:12px 16px;background:var(--sand);border-bottom:4px solid var(--line)}
+h1{margin:0;font-size:1.6rem;font-weight:800}
+.stats{display:flex;gap:8px;flex-wrap:wrap}
+.pill{background:var(--paper);border:3px solid var(--line);border-radius:999px;padding:2px 12px;font-weight:700}
+nav{display:flex;gap:6px;overflow-x:auto;padding:10px 12px}
+nav button{flex:0 0 auto}
+button{font:inherit;font-weight:700;cursor:pointer;background:var(--foam);color:var(--ink);border:3px solid var(--line);border-radius:14px;padding:4px 12px;box-shadow:0 4px 0 var(--line);transition:transform .08s}
+button:active{transform:translateY(3px);box-shadow:0 1px 0 var(--line)}
+button:focus-visible,input:focus-visible,select:focus-visible{outline:3px dashed var(--coral);outline-offset:2px}
+button.on{background:var(--coral)}
+button:disabled{opacity:.5;cursor:not-allowed}
+main{max-width:980px;margin:0 auto;padding:0 12px 40px}
+.card{background:var(--paper);border:3px solid var(--line);border-radius:18px;padding:12px;margin:10px 0;box-shadow:0 5px 0 var(--line)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:10px}
+.grid .card{margin:0}
+.tank{position:relative;height:340px;border:4px solid var(--line);border-radius:20px;overflow:hidden;box-shadow:0 6px 0 var(--line)}
+.tank .sand{position:absolute;left:0;right:0;bottom:0;height:44px;background:var(--sand);border-top:4px solid #d9b866}
+.fish{position:absolute;left:5%;animation:swim var(--d) ease-in-out infinite alternate;animation-delay:var(--w);font-size:2.2rem;text-align:center;line-height:1}
+.fish i{display:block;font-style:normal;animation:flip calc(var(--d)*2) linear infinite;animation-delay:var(--w)}
+.fish b{position:absolute;left:50%;top:-16px;transform:translateX(-50%);font-size:.7rem;background:#fff;border:2px solid var(--line);border-radius:8px;padding:0 5px;white-space:nowrap}
+@keyframes swim{to{left:82%}}
+@keyframes flip{0%,49.9%{transform:scaleX(-1)}50%,100%{transform:scaleX(1)}}
+.deco{position:absolute;bottom:22px;font-size:2.6rem;cursor:pointer}
+.bub{position:absolute;bottom:-20px;width:10px;height:10px;border:2px solid #ffffffaa;border-radius:50%;animation:up 6s linear infinite}
+.fish{cursor:pointer}
+.fish.happy{--d:2.2s}
+.fish.happy i{animation:flip calc(var(--d)*2) linear infinite,hop .45s ease-in-out 5;animation-delay:var(--w),0s}
+@keyframes hop{50%{margin-top:-18px}}
+.heart{position:absolute;font-size:1.4rem;pointer-events:none;animation:hearty 1s forwards}
+@keyframes hearty{to{transform:translateY(-50px);opacity:0}}
+.ripple{position:absolute;width:20px;height:20px;margin:-10px 0 0 -10px;border:3px solid #fff;border-radius:50%;pointer-events:none;animation:rip .6s forwards}
+@keyframes rip{to{transform:scale(5);opacity:0}}
+@keyframes up{to{bottom:105%;opacity:0}}
+@media(prefers-reduced-motion:reduce){.fish,.fish i,.bub,.heart,.ripple{animation:none}}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.bar{height:10px;background:#0002;border-radius:6px;overflow:hidden;border:2px solid var(--line);flex:1;min-width:50px}
+.bar>div{height:100%;background:var(--coral)}
+.tag{font-size:.75rem;font-weight:800;border:2px solid var(--line);border-radius:8px;padding:0 6px;color:#fff}
+.r0{background:#6b8a94}.r1{background:#2e9d5b}.r2{background:#2f6fe0}.r3{background:#8b3fd1}.r4{background:#e08a00}
+.big{font-size:2.4rem;line-height:1}
+input[type=text]{font:inherit;border:3px solid var(--line);border-radius:10px;padding:2px 8px;width:130px;background:#fff}
+details{margin-top:6px;font-size:.9rem}summary{cursor:pointer;font-weight:700}
+.avatar{text-align:center;font-size:3rem;line-height:1.1}
+.sel{outline:4px solid var(--coral)}
+.item{cursor:pointer;border:3px solid var(--line);border-radius:12px;padding:4px 8px;background:#fff;font-size:1.3rem}
+.arena{position:relative;height:300px;border:4px solid var(--line);border-radius:16px;overflow:hidden;background:linear-gradient(#9be7ff,#2a8fb5);user-select:none;touch-action:manipulation}
+.tgt{position:absolute;left:-12%;font-size:2.4rem;cursor:pointer;animation:cross var(--t) linear forwards}
+.tgt.gold{filter:drop-shadow(0 0 8px gold) saturate(2)}.tgt.bad{filter:hue-rotate(80deg)}
+@keyframes cross{to{left:104%}}
+.mem{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.mc{height:74px;font-size:2rem}
+.tbar{position:relative;height:36px;background:#fff;border:3px solid var(--line);border-radius:10px;margin:60px 10px 40px}
+.zone{position:absolute;top:0;bottom:0;background:var(--foam);border-left:3px solid var(--line);border-right:3px solid var(--line)}
+.mk{position:absolute;top:-10px;bottom:-10px;width:8px;margin-left:-4px;background:var(--coral);border-radius:4px;border:2px solid var(--line)}
+.farm{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:14px;padding:14px;border:4px solid var(--line);border-radius:20px;background:#86c65a;box-shadow:0 6px 0 var(--line)}
+.dike{background:#a7742f;border:3px solid var(--line);border-radius:16px;padding:8px}
+.water{position:relative;height:150px;overflow:hidden;border-radius:10px;border:3px solid #0a5a73;background:linear-gradient(#63d6dc,#1c8aa6)}
+.murk{position:absolute;inset:0;background:#6b5a22;pointer-events:none}
+.aer{position:absolute;right:8px;bottom:4px;font-size:1.6rem;animation:spin 2s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.pcard{background:var(--paper);border:3px solid var(--line);border-radius:12px;padding:6px 8px;margin-top:8px}
+.lock{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;min-height:200px;border:3px dashed var(--line);border-radius:16px;background:#ffffff66}
+#toast{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);background:var(--ink);color:#fff;padding:8px 18px;border-radius:14px;opacity:0;pointer-events:none;transition:opacity .2s;z-index:9;max-width:90vw;text-align:center}
+#toast.show{opacity:1}
+#modal{position:fixed;inset:0;background:#000a;display:none;align-items:center;justify-content:center;padding:16px;z-index:8}
+#modal .card{max-width:420px}
+h2{margin:6px 0}
+.farm{position:relative;background:repeating-linear-gradient(0deg,#8fcf5e 0 28px,#86c65a 28px 56px)}
+.canal{grid-column:1/-1;display:flex;justify-content:space-around;align-items:center;height:40px;background:linear-gradient(90deg,#63d6dc,#1c8aa6,#63d6dc);border:3px solid var(--line);border-radius:10px;font-weight:700;font-size:.9rem}
+.water.round{border-radius:50%;width:170px;height:170px;margin:0 auto}
+.dike.round{border-radius:50%;background:#2f5f9e;width:190px;margin:0 auto;padding:8px}
+.dike.pay{background:#c9a15a}.water.pay{background:linear-gradient(#a9d9a0,#3f8f78)}
+.dike.ras{background:#3b7a57}
+.drums{display:flex;justify-content:center;gap:10px;font-size:1.5rem;margin-top:4px}
+.drums span{text-align:center;font-size:1.4rem}.drums small{display:block;font-size:.6rem;font-weight:700}
+</style>
+</head>
+<body>
+<header>
+  <h1>🐠 Akuarium Ceria</h1>
+  <div class="stats" id="stats"></div>
+  <button id="snd" onclick="toggleSnd()" aria-label="Suara hidup/mati"></button>
+</header>
+<nav id="nav"></nav>
+<main id="main"></main>
+<div id="toast"></div>
+<div id="modal"><div class="card" id="mbody"></div></div>
+
+<script>
+const RN=['Common','Uncommon','Rare','Super Rare','Legendary'];
+const INC=[1,2,4,8,20], CAP=10, FOOD=10;
+// type: h = ikan hias, k = ikan/udang konsumsi
+const F={
+guppy:{e:'🐟',h:0,n:'Guppy',s:'Poecilia reticulata',o:'Amerika Selatan (Venezuela, Guyana)',f:'Satu induk betina bisa melahirkan 20–60 anak sekaligus!',b:'Mudah dipelihara. Suhu 24–28°C. Perbandingan jantan:betina 1:2–3. Pisahkan induk setelah melahirkan agar anak tidak dimakan.',r:0,p:20,t:'h'},
+cupang:{e:'🐡',h:300,n:'Cupang',s:'Betta splendens',o:'Asia Tenggara (Thailand, Kamboja)',f:'Bisa bernapas langsung di udara lewat organ labirin.',b:'Pelihara jantan sendiri-sendiri karena agresif. Air tenang, ganti 20% air tiap minggu. Pakan cacing sutra atau pelet kecil.',r:0,p:40,t:'h'},
+badut:{e:'🐠',h:0,n:'Ikan Badut',s:'Amphiprion ocellaris',o:'Indo-Pasifik, termasuk perairan Indonesia',f:'Semua ikan badut lahir jantan, lalu yang terbesar berubah jadi betina!',b:'Butuh akuarium air laut (salinitas 30–35 ppt) dan anemon sebagai rumah. Telur dijaga sang jantan.',r:1,p:150,t:'h'},
+koi:{e:'🐟',h:20,n:'Koi',s:'Cyprinus rubrofuscus',o:'Jepang (hasil seleksi dari ikan mas)',f:'Koi bisa hidup lebih dari 50 tahun, bahkan ada yang 200 tahun.',b:'Butuh kolam luas dan filter kuat. Suhu 15–25°C. Seleksi warna dilakukan saat benih berumur 2–3 bulan.',r:2,p:400,t:'h'},
+bluetang:{e:'🐠',h:200,n:'Dori Biru',s:'Paracanthurus hepatus',o:'Indo-Pasifik tropis (terumbu karang)',f:'Pura-pura mati ketika terancam, seperti Dory di film!',b:'Sulit dibudidayakan, kebanyakan masih tangkapan alam. Butuh tangki besar, air laut stabil, dan banyak tempat sembunyi.',r:2,p:450,t:'h'},
+buntal:{e:'🐡',h:60,n:'Ikan Buntal',s:'Tetraodon nigroviridis',o:'Asia Tenggara (air payau)',f:'Menggembung jika terancam, dan kulitnya mengandung racun.',b:'Pelihara di air payau (salinitas 5–15 ppt). Pakan siput atau udang kecil supaya giginya tidak terlalu panjang.',r:3,p:700,t:'h'},
+arwana:{e:'🐉',h:0,n:'Arwana Super Red',s:'Scleropages formosus',o:'Kalimantan Barat & Sumatra, Indonesia',f:'Dijuluki "naga air" dan dianggap pembawa hoki. Bisa melompat tinggi dari air!',b:'Dilindungi, hanya hasil penangkaran bersertifikat yang boleh dipelihara. Induk mengerami telur di dalam mulut (mouthbrooder). Butuh akuarium besar tertutup.',r:3,p:1500,t:'h'},
+hiu:{e:'🦈',h:0,n:'Hiu Bambu',s:'Chiloscyllium punctatum',o:'Indo-Pasifik, perairan Indonesia',f:'Hiu kecil ini bertelur dan jinak, bisa menahan napas di luar air berjam-jam.',b:'Butuh akuarium air laut ≥ 200 liter, dasar berpasir. Pakan udang dan potongan ikan.',r:3,p:1800,t:'h'},
+coelacanth:{e:'🐟',h:230,n:'Raja Laut Manado',s:'Latimeria menadoensis',o:'Laut Sulawesi Utara, Indonesia',f:'"Fosil hidup" yang dulu dikira punah bersama dinosaurus 66 juta tahun lalu!',b:'Tidak bisa dibudidayakan, sangat langka dan dilindungi. Tugas kita: menjaga laut tempat mereka hidup.',r:4,p:5000,t:'h'},
+nila:{e:'🐟',h:100,n:'Ikan Nila',s:'Oreochromis niloticus',o:'Sungai Nil, Afrika',f:'Ikan favorit tambak dunia karena tumbuh cepat dan tahan banting.',b:'Panen 4–6 bulan. Padat tebar 10–20 ekor/m². Pakan pelet protein 25–30%. Cocok di kolam tanah, terpal, atau keramba.',r:0,p:30,t:'k'},
+lele:{e:'🐟',h:30,n:'Lele',s:'Clarias gariepinus',o:'Afrika (dibudidayakan luas di Indonesia)',f:'Punya patil dan alat napas tambahan, jadi bisa hidup di air minim oksigen.',b:'Panen 2,5–3 bulan. Bisa padat tebar tinggi (bioflok, 500–1000 ekor/m³). Pantau kualitas air dan ukuran ikan agar seragam supaya tidak saling memangsa.',r:0,p:25,t:'k'},
+bandeng:{e:'🐟',h:180,n:'Bandeng',s:'Chanos chanos',o:'Indo-Pasifik, tambak pesisir Jawa',f:'Punya banyak duri halus; Gresik dan Sidoarjo terkenal sebagai sentra bandengnya!',b:'Dipelihara di tambak payau 4–6 bulan. Pakan alami berupa klekap (lumut dasar tambak) dan pelet.',r:1,p:40,t:'k'},
+gurame:{e:'🐟',h:35,n:'Gurame',s:'Osphronemus goramy',o:'Asia Tenggara (Jawa, Sumatra)',f:'Ikan konsumsi mahal karena tumbuhnya lambat. Anaknya merawat sarang dari serabut ijuk!',b:'Panen 8–12 bulan. Suka sayuran: daun talas, kangkung, pepaya. Kolam tenang, air jernih.',r:1,p:80,t:'k'},
+vaname:{e:'🦐',h:0,n:'Udang Vaname',s:'Litopenaeus vannamei',o:'Pantai Pasifik Amerika Tengah & Selatan',f:'Udang ekspor utama Indonesia. Tubuhnya berganti kulit (molting) saat tumbuh!',b:'Panen 90–120 hari. Salinitas 15–25 ppt, kualitas air dijaga (DO > 4 ppm). Gunakan aerator kincir dan benih bebas penyakit (SPF).',r:2,p:60,t:'k'},
+kepiting:{e:'🦀',h:0,n:'Kepiting Bakau',s:'Scylla serrata',o:'Hutan mangrove Indo-Pasifik',f:'Harus berganti cangkang berkali-kali. Kepiting "soka" dipanen saat cangkangnya masih lunak!',b:'Dibudidayakan di tambak mangrove atau box individu supaya tidak saling menyerang. Panen 3–5 bulan. Pakan ikan rucah.',r:2,p:120,t:'k'}
+};
+const DECOR={
+tan:['🌿','Tanaman Air',30],kelp:['🌱','Rumput Laut',40],cor:['🪸','Karang Cantik',90],rock:['🪨','Batu Besar',50],
+home:['🏠','Rumah Ikan',120],cas:['🏰','Istana Mini',350],stat:['🗿','Patung Moai',250],ship:['🚢','Kapal Karam',400],
+treasure:['💰','Peti Harta',200],shell:['🐚','Kerang',35],star:['⭐','Bintang Laut',60],anc:['⚓','Jangkar',110]};
+const BG=[['Laut Biru','linear-gradient(#52c7e8,#0b6e99)',0],['Senja','linear-gradient(#ffb36b,#b04a6e 60%,#3b2a6e)',200],['Hutan Kelp','linear-gradient(#a6f0b8,#1d7a5a)',300],['Laut Dalam','linear-gradient(#143a73,#050f26)',500],['Permen','linear-gradient(#ffd1f0,#9fd8ff)',600]];
+const HAT=[['🎩','Topi Sulap',0],['👑','Mahkota',500],['🧢','Topi Baseball',60],['🎀','Pita',40],['⛑️','Helm Penyelam',120],['👒','Topi Jerami',80]];
+const ITEM=[['🎣','Pancing',0],['🪣','Ember',30],['🔦','Senter',70],['🥽','Kacamata Renang',150],['🔱','Trisula',800]];
+const JOBS=[['🧽','Bersihkan kolam',10,3],['🚚','Antar pakan',30,8],['🏪','Jaga toko ikan',80,20],['🤿','Guide snorkeling',200,45]];
+const TABS=[['aq','🐠 Akuarium'],['job','💼 Kerja'],['shop','🛒 Toko'],['pond','🦐 Tambak'],['learn','📚 Belajar'],['gacha','🎰 Gacha'],['quest','🏆 Misi']];
+
+let S=JSON.parse(localStorage.getItem('akuarium')||'null')||{coin:150,food:8,fish:[],decor:[],bg:0,ownBg:[0],ownOut:['🎩','🎣'],hat:'🎩',item:'🎣',pname:'Kapten Ikan',pond:[null,null,null,null],nid:1,quiz:0};
+S.pn=S.pn||Math.max(2,S.pond.reduce((a,p,i)=>p?i+1:a,0));while(S.pond.length<6)S.pond.push(null);S.pond.forEach(p=>{if(p&&p.wq==null)p.wq=100});S.cl=S.cl||[];S.pt=S.pt||[];S.mk=S.mk||1;S.jp=S.jp||{};{const td=new Date().toDateString();if(S.day!==td){S.day=td;S.coin+=50;setTimeout(()=>toast('🎁 Bonus harian +🪙50'),700)}}
+let tab='aq',sel=[],job=null,G=null,shopTab='fish',q=null;
+const $=s=>document.querySelector(s);
+const save=()=>localStorage.setItem('akuarium',JSON.stringify(S));
+function toast(m){const t=$('#toast');t.textContent=m;t.className='show';clearTimeout(toast.t);toast.t=setTimeout(()=>t.className='',2200)}
+function tag(r){return `<span class="tag r${r}">${RN[r]}</span>`}
+function spend(c){if(S.coin<c){toast('Koin belum cukup 🪙');return false}S.coin-=c;return true}
+function addFish(sp,mut){if(S.fish.length>=CAP){toast('Akuarium penuh! Maksimal '+CAP+' ikan');return false}
+ S.fish.push({id:S.nid++,sp,name:F[sp].n,hunger:100,mut:!!mut,cd:0});return true}
+function info(sp,head){const f=F[sp];$('#mbody').innerHTML=`<div class="big">${f.e}</div><h2>${head||''} ${f.n}</h2>${tag(f.r)}
+<p><b>Nama ilmiah:</b> <i>${f.s}</i><br><b>Asal:</b> ${f.o}</p><p>💡 ${f.f}</p><p>🌱 <b>Cara budidaya:</b> ${f.b}</p><button onclick="closeM()">Oke!</button>`;
+ $('#modal').style.display='flex'}
+function closeM(){$('#modal').style.display='none'}
+$('#modal').onclick=e=>{if(e.target.id==='modal')closeM()};
+
+function render(){
+ A.theme=THM[tab]?tab:'learn';if(tab!=='job')stopG();
+ $('#stats').innerHTML=`<span class="pill">🪙 ${S.coin}</span><span class="pill">🍤 Pakan ${S.food}</span><span class="pill">🐟 ${S.fish.length}/${CAP}</span>`;
+ $('#nav').innerHTML=TABS.map(t=>`<button class="${tab===t[0]?'on':''}" onclick="tab='${t[0]}';render()">${t[1]}</button>`).join('');
+ $('#main').innerHTML=({aq:vAq,job:vJob,shop:vShop,pond:vPond,learn:vLearn,gacha:vGacha,quest:vQuest})[tab]();
+ if(tab==='job'&&G&&!G.ready){G.ready=1;RUN[G.k]()}
+ save();
+}
+function vAq(){
+ let bub=[...Array(8)].map((_,i)=>`<div class="bub" style="left:${8+i*12}%;animation-delay:${i*.8}s"></div>`).join('');
+ let fish=S.fish.map(f=>{const d=6+(f.id*7%9),w=-(f.id*3%7);return `<div class="fish" onclick="pet(${f.id},this,event)" style="top:${8+(f.id*17%52)}%;--d:${d}s;--w:${w}s"><b>${f.mut?'✨':''}${f.name}</b><i style="filter:hue-rotate(${F[f.sp].h}deg) ${f.hunger<=0?'grayscale(1)':''}">${F[f.sp].e}</i></div>`}).join('');
+ let dec=S.decor.filter(d=>d.on).map(d=>`<div class="deco" title="Klik untuk simpan" onclick="togDeco(${d.id})" style="left:${d.x}%">${DECOR[d.k][0]}</div>`).join('');
+ let list=S.fish.map(f=>`<div class="card ${sel.includes(f.id)?'sel':''}" style="margin:6px 0">
+  <div class="row"><span style="font-size:1.8rem;filter:hue-rotate(${F[f.sp].h}deg)">${F[f.sp].e}</span>
+  <input type="text" value="${f.name}" maxlength="14" aria-label="Nama ikan" onchange="rename(${f.id},this.value)">
+  ${tag(F[f.sp].r)}${f.mut?'<span class="tag r4">✨ Mutasi</span>':''}
+  <div class="bar" title="Kenyang"><div id="hb${f.id}" style="width:${f.hunger}%"></div></div>
+  <button onclick="selFish(${f.id})">${sel.includes(f.id)?'Batal':'Pilih'}</button>
+  <button onclick="info('${f.sp}')">ℹ️</button><button onclick="sell(${f.id})">Jual 🪙${sellP(f)}</button></div></div>`).join('')||'<p>Akuarium masih kosong. Cari uang di tab <b>Kerja</b>, lalu beli ikan di <b>Toko</b>!</p>';
+ let ok=sel.length===2&&F[S.fish.find(x=>x.id===sel[0]).sp]===F[S.fish.find(x=>x.id===sel[1]).sp];
+ return `<div class="tank" onclick="ripple(event,this)" style="background:${BG[S.bg][1]}">${bub}${fish}<div class="sand"></div>${dec}</div>
+ <div class="card"><div class="row"><button onclick="feedAll()">🍤 Beri makan semua</button>
+ <button ${ok?'':'disabled'} onclick="breed()">💞 Breeding (🪙50)</button>
+ <small>${sel.length===2&&!ok?'Pilih 2 ikan dari spesies yang sama.':'Pilih 2 ikan sejenis untuk breeding. Ikan kenyang menghasilkan koin!'}</small></div></div>
+ <div class="card"><h2>🎨 Dekorasi</h2><div class="row">${S.decor.map(d=>`<span class="item" style="opacity:${d.on?1:.4}" onclick="togDeco(${d.id})" title="${DECOR[d.k][1]}">${DECOR[d.k][0]}</span>`).join('')||'<small>Belum punya dekorasi. Beli di Toko!</small>'}</div>
+ <h2>🌊 Latar</h2><div class="row">${S.ownBg.map(i=>`<button class="${S.bg===i?'on':''}" onclick="S.bg=${i};render()">${BG[i][0]}</button>`).join('')}</div></div>
+ <div class="card"><div class="row"><div class="avatar">${S.hat}<br>🧑‍🌾${S.item}</div><div><input type="text" value="${S.pname}" maxlength="16" aria-label="Nama pemain" onchange="S.pname=this.value;save()"><br><small>Ganti baju di tab Toko → Outfit</small></div></div></div>
+ <h2 style="color:#fff">Ikan kamu</h2>${list}`;
+}
+function sellP(f){return Math.round(F[f.sp].p*(f.mut?1:.5))}
+function rename(id,v){S.fish.find(f=>f.id===id).name=v.trim()||'Tanpa nama';render()}
+function selFish(id){sel=sel.includes(id)?sel.filter(x=>x!==id):[...sel,id].slice(-2);render()}
+function sell(id){const f=S.fish.find(x=>x.id===id);S.coin+=sellP(f);S.fish=S.fish.filter(x=>x!==f);sel=sel.filter(x=>x!==id);toast(`${f.name} dijual 😢`);render()}
+function togDeco(id){const d=S.decor.find(x=>x.id===id);d.on=!d.on;if(d.on)d.x=5+Math.random()*80;render()}
+function feedAll(){const h=S.fish.filter(f=>f.hunger<80);if(!h.length)return toast('Semua ikan masih kenyang 😋');
+ if(S.food<h.length)return toast(`Butuh ${h.length} pakan. Beli di Toko!`);S.food-=h.length;h.forEach(f=>f.hunger=100);toast('Nyam nyam! 🍤');render()}
+function breed(){const[a,b]=sel.map(id=>S.fish.find(f=>f.id===id));if(S.fish.length>=CAP)return toast('Akuarium penuh!');
+ if(a.hunger<30||b.hunger<30)return toast('Induk lapar. Beri makan dulu!');if(!spend(50))return;
+ const mut=Math.random()<.15;addFish(a.sp,mut);const n=S.fish[S.fish.length-1];n.name='Bayi '+F[a.sp].n;
+ S.brd=(S.brd||0)+1;sel=[];toast(mut?'🥚 Lahir bayi MUTASI ✨ (nilai jual 2x)!':'🥚 Anak ikan lahir!');render()}
+
+const GAMES=[['jaring','🎣','Jaring Ikan','Tap ikan yang lewat selama 25 detik. Ikan emas = 5 poin, tapi jangan tap buntal hijau 🐡 (−3). Hadiah 🪙2 per poin.'],['memori','🧠','Memori Ikan','Cocokkan 6 pasang ikan. Makin sedikit langkah, makin besar gaji (maks 🪙68).'],['toko','🏪','Warung Ikan','Layani 30 detik: tap ikan sesuai pesanan pelanggan. Combo beruntun = poin lebih besar! Hadiah 🪙3 per poin.'],['bersih','🧽','Bersihkan Kaca','Lumut hijau 🟢 muncul terus, tap sebelum menumpuk (8 = gagal). Hadiah 🪙3 per lumut.'],['pakan','🍤','Pakan Tepat','Tap saat penanda ada di zona hijau. 6 ronde, makin cepat dan sempit! Maks 🪙120.']];
+function vJob(){
+ if(!G)return `<div class="card"><h2>🎮 Kerja = Main!</h2><p>Pilih game, mainkan sendiri, dapat koin langsung. Makin jago & makin sering main, level dan gaji naik!</p></div><div class="grid">${GAMES.map(g=>`<div class="card"><div class="big">${g[1]}</div><b>${g[2]}</b><p><small>${g[3]}</small></p><small>Lv ${Math.floor((S.jp[g[0]]||0)/5)+1} · gaji +${Math.floor((S.jp[g[0]]||0)/5)*10}% (naik level tiap 5x main)</small><br><button onclick="play('${g[0]}')">Main!</button></div>`).join('')}</div>`;
+ return `<div class="card"><div class="row"><b id="gh" style="flex:1"></b><button onclick="stopG();render()">Berhenti</button></div><div id="arena"></div></div>`}
+function play(k){G={k,T:[]};render()}
+function stopG(){if(G){G.T.forEach(t=>{clearInterval(t);clearTimeout(t)})}G=null}
+function finish(c,m){const k=G&&G.k;if(k){S.jp[k]=(S.jp[k]||0)+1;c=Math.round(c*(1+.1*Math.floor(S.jp[k]/5)))}S.coin+=c;S.games=(S.games||0)+1;ding();toast(`${m} +🪙${c}`);stopG();render()}
+const RUN={
+jaring(){let sc=0,tl=25;const a=$('#arena'),h=$('#gh');a.className='arena';
+ const up=()=>h.textContent=`⏱️ ${tl} dtk · Poin: ${sc}`;up();
+ G.T.push(setInterval(()=>{tl--;up();if(tl<=0)finish(Math.max(0,sc*2),`Skor ${sc}!`)},1000));
+ G.T.push(setInterval(()=>{const r=Math.random();let o=r<.15?{e:'🐠',v:5,c:'gold'}:r<.3?{e:'🐡',v:-3,c:'bad'}:{e:['🐟','🐠','🦐'][Math.random()*3|0],v:1,c:''};
+  const d=document.createElement('div');d.className='tgt '+o.c;d.textContent=o.e;d.style.top=Math.random()*80+'%';d.style.setProperty('--t',(1.8+Math.random()*1.5)+'s');
+  d.onpointerdown=()=>{sc+=o.v;up();o.v>0?ding():buzz();blub();d.remove()};d.onanimationend=()=>d.remove();a.appendChild(d)},550))},
+toko(){const a=$('#arena'),h=$('#gh'),em=['🐟','🐠','🦐','🦀','🐡'];let sc=0,tl=30,cm=0,w;a.className='';
+ const nx=()=>{w=em[Math.random()*5|0];$('#od').textContent='🧑 minta '+w};const up=()=>h.textContent=`⏱️ ${tl} dtk · Poin: ${sc} · Combo ${cm}`;
+ a.innerHTML=`<div class="card" style="text-align:center;font-size:2.2rem"><div id="od"></div></div><div class="row" style="justify-content:center">${em.map(e=>`<button style="font-size:2.2rem" data-e="${e}">${e}</button>`).join('')}</div>`;nx();up();
+ a.onclick=ev=>{const b=ev.target.closest('[data-e]');if(!b)return;if(b.dataset.e===w){sc+=1+(cm/3|0);cm++;ding()}else{cm=0;buzz()}nx();up()};
+ G.T.push(setInterval(()=>{tl--;up();if(tl<=0)finish(sc*3,`${sc} poin!`)},1000))},
+bersih(){const a=$('#arena'),h=$('#gh');let sc=0,tl=20,n=0;a.className='arena';const up=()=>h.textContent=`⏱️ ${tl} dtk · Bersih: ${sc} · Lumut: ${n}/8`;up();
+ G.T.push(setInterval(()=>{tl--;up();if(tl<=0)finish(sc*3,`Kaca kinclong! ${sc}`)},1000));
+ G.T.push(setInterval(()=>{const d=document.createElement('div');d.textContent='🟢';d.style.cssText=`position:absolute;font-size:${2+Math.random()*1.5}rem;left:${Math.random()*88}%;top:${Math.random()*78}%;cursor:pointer`;n++;
+  d.onpointerdown=()=>{sc++;n--;ding();d.remove();up()};a.appendChild(d);up();if(n>=8)finish(sc*3,'Lumut kebanyakan!')},650))},
+memori(){const a=$('#arena'),h=$('#gh');a.className='mem';const em=['🐟','🐠','🐡','🦐','🦀','🦈'];
+ const deck=[...em,...em].sort(()=>Math.random()-.5);let open=[],moves=0,done=0,lock=false;
+ const up=()=>h.textContent=`Langkah: ${moves} · Pasangan: ${done}/6`;up();
+ a.innerHTML=deck.map((e,i)=>`<button class="mc" data-i="${i}">❓</button>`).join('');
+ a.onclick=ev=>{const b=ev.target.closest('.mc');if(!b||lock||b.disabled||open.includes(b))return;b.textContent=deck[b.dataset.i];open.push(b);
+  if(open.length===2){moves++;lock=true;const[x,y]=open;
+   if(deck[x.dataset.i]===deck[y.dataset.i]){x.disabled=y.disabled=true;done++;ding();open=[];lock=false;if(done===6)G.T.push(setTimeout(()=>finish(Math.max(15,110-moves*7),`Selesai ${moves} langkah!`),400))}
+   else G.T.push(setTimeout(()=>{x.textContent=y.textContent='❓';open=[];lock=false},700));up()}}},
+pakan(){const a=$('#arena'),h=$('#gh');a.className='';let round=0,tot=0,pos=0,dir=1,sp=1.2,zw=26,zx=30;
+ a.innerHTML=`<div class="tbar"><div class="zone" id="zn"></div><div class="mk" id="mk"></div></div><div style="text-align:center"><button id="tap" style="font-size:1.6rem;padding:10px 40px">🍤 Tap!</button></div>`;
+ const setup=()=>{zw=Math.max(10,26-round*3);sp=1.2+round*.45;zx=5+Math.random()*(90-zw);$('#zn').style.left=zx+'%';$('#zn').style.width=zw+'%';h.textContent=`Ronde ${round+1}/6 · Poin: ${tot}`};setup();
+ G.T.push(setInterval(()=>{pos+=dir*sp;if(pos>=100){pos=100;dir=-1}if(pos<=0){pos=0;dir=1}$('#mk').style.left=pos+'%'},16));
+ $('#tap').onclick=()=>{const d=Math.abs(pos-(zx+zw/2));const pts=d<=zw/2?(d<zw/6?20:10):0;tot+=pts;pts?ding():buzz();toast(pts===20?'Sempurna! +20':pts?'Bagus! +10':'Meleset!');round++;if(round>=6)finish(tot,'Selesai!');else setup()}}
+};
+
+function vShop(){
+ const T=[['fish','🐠 Ikan hias'],['deco','🌿 Dekorasi'],['bg','🌊 Latar'],['out','👒 Outfit'],['food','🍤 Pakan']];
+ let h=`<div class="row" style="margin:6px 0">${T.map(t=>`<button class="${shopTab===t[0]?'on':''}" onclick="shopTab='${t[0]}';render()">${t[1]}</button>`).join('')}</div><div class="grid">`;
+ if(shopTab==='fish')h+=Object.keys(F).filter(k=>F[k].t==='h').map(k=>card(k,`<button onclick="buyFish('${k}')">Beli 🪙${F[k].p}</button>`)).join('');
+ if(shopTab==='deco')h+=Object.keys(DECOR).map(k=>`<div class="card"><div class="big">${DECOR[k][0]}</div><b>${DECOR[k][1]}</b> (${S.decor.filter(d=>d.k===k).length})<br><button onclick="buyDeco('${k}')">Beli 🪙${DECOR[k][2]}</button></div>`).join('');
+ if(shopTab==='bg')h+=BG.map((b,i)=>`<div class="card"><div style="height:60px;border-radius:10px;border:3px solid var(--line);background:${b[1]}"></div><b>${b[0]}</b><br>${S.ownBg.includes(i)?'<button disabled>Dimiliki</button>':`<button onclick="buyBg(${i})">Beli 🪙${b[2]}</button>`}</div>`).join('');
+ if(shopTab==='out')h+=[...HAT.map(x=>[x,'hat']),...ITEM.map(x=>[x,'item'])].map(([x,s])=>`<div class="card"><div class="big">${x[0]}</div><b>${x[1]}</b><br>${S.ownOut.includes(x[0])?`<button class="${S[s]===x[0]?'on':''}" onclick="S.${s}='${x[0]}';render()">${S[s]===x[0]?'Dipakai':'Pakai'}</button>`:`<button onclick="buyOut('${x[0]}',${x[2]})">Beli 🪙${x[2]}</button>`}</div>`).join('');
+ if(shopTab==='food')h+=`<div class="card"><div class="big">🍤</div><b>Pakan ×5</b><br><button onclick="buyFood(5,${FOOD*5/2})">Beli 🪙${FOOD*5/2}</button></div><div class="card"><div class="big">🍤🍤</div><b>Pakan ×20</b> (hemat!)<br><button onclick="buyFood(20,${FOOD*4})">Beli 🪙${FOOD*4}</button></div>`;
+ return h+'</div>'}
+function card(k,btn){const f=F[k];return `<div class="card"><div class="big" style="filter:hue-rotate(${f.h}deg)">${f.e}</div><b>${f.n}</b> ${tag(f.r)}<br><small><i>${f.s}</i></small><br>${btn}
+ <details><summary>Fakta & budidaya</summary><p>📍 ${f.o}<br>💡 ${f.f}<br>🌱 ${f.b}</p></details></div>`}
+function buyFish(k){if(S.fish.length>=CAP)return toast('Akuarium penuh!');if(!spend(F[k].p))return;addFish(k);S.fish[S.fish.length-1].hunger=100;info(k,'Kamu dapat');render()}
+function buyDeco(k){if(!spend(DECOR[k][2]))return;S.decor.push({id:S.nid++,k,on:true,x:5+Math.random()*80});toast(DECOR[k][1]+' dipasang!');render()}
+function buyBg(i){if(!spend(BG[i][2]))return;S.ownBg.push(i);S.bg=i;render()}
+function buyOut(x,p){if(!spend(p))return;S.ownOut.push(x);render()}
+function buyFood(n,p){if(!spend(p))return;S.food+=n;render()}
+
+const PC=[0,0,200,400,700,1000];
+const PT={tanah:['Kolam Tanah','🟫',0,['nila','lele','gurame','bandeng'],'Kolam galian klasik, muat banyak.'],terpal:['Kolam Terpal Bulat','🔵',0,['nila','lele','gurame'],'Murah & cepat dibuat, bentuk bulat.'],payau:['Tambak Payau','🧂',100,['bandeng','vaname','kepiting'],'Air payau untuk bandeng, udang, kepiting.'],ras:['Kolam RAS + 3 Filter','♻️',350,['nila','lele','gurame'],'Terpal + filter kerikil, arang, air bersih. Air awet 5x!']};
+const ptype=i=>S.pt[i]||'tanah';
+const price=f=>Math.round(f.p*3.5*S.mk);
+function vPond(){
+ let h=`<div class="card"><h2>🌾 Tambak ${S.pname}</h2><p>Tebar benih, beri pakan, jaga air, lalu panen. Harga pasar hari ini: <b>×${S.mk}</b> ${S.mk>=1.2?'📈 waktu yang pas untuk panen!':S.mk<.95?'📉 tahan dulu kalau bisa':''}</p>
+ <div class="row">${S.aer?'<span class="pill">🌀 Kincir aktif</span>':`<button onclick="buyAer()">🌀 Kincir 🪙300</button>`}${S.auto?'<span class="pill">🤖 Pakan otomatis</span>':`<button onclick="buyAuto()">🤖 Feeder otomatis 🪙400</button>`}${S.net?'<span class="pill">🥅 Jaring burung</span>':`<button onclick="buyNet()">🥅 Jaring pelindung 🪙250</button>`}</div>${S.rain>0?'<p><b>🌧️ Sedang hujan!</b> Air cepat keruh: ganti air, atau andalkan kincir/RAS.</p>':''}<small>Waspada burung 🐦: tap sebelum lewat, atau pasang jaring.</small></div>
+ <div class="farm"><div class="canal"><span>🚪 Pintu air masuk</span><span>🌊 Saluran utama</span><span>🛖 Gubuk jaga</span></div>`;
+ h+=S.pond.map((p,i)=>{
+  if(i>=S.pn)return i===S.pn?`<div class="lock"><div class="big">🏞️</div><b>Lahan ${i+1}: bangun kolam</b>${Object.keys(PT).map(t=>`<button title="${PT[t][4]}" onclick="buyPond('${t}')">${PT[t][1]} ${PT[t][0]} 🪙${PC[i]+PT[t][2]}</button>`).join('')}</div>`:`<div class="lock" style="opacity:.5"><div class="big">🔒</div><small>Lahan ${i+1}</small></div>`;
+  const t=ptype(i),r=t==='terpal'||t==='ras',f=p&&F[p.sp];
+  const fish=p?[0,1,2,3,4].map(j=>`<div class="fish" data-pf="${i}" style="top:${8+j*15}%;--d:${5+j*2}s;--w:-${j*2}s;font-size:${1+p.p/60}rem;cursor:default"><i style="filter:hue-rotate(${f.h}deg)">${f.e}</i></div>`).join(''):'';
+  const water=`<div class="dike ${r?'round':''} ${t==='payau'?'pay':''} ${t==='ras'?'ras':''}"><div class="water ${r?'round':''} ${t==='payau'?'pay':''}">${fish}<div class="murk" id="pm${i}" style="opacity:${p?(100-p.wq)/120:0}"></div>${S.aer?'<span class="aer">🌀</span>':''}</div></div>${t==='ras'?'<div class="drums"><span>🛢️<small>Kerikil</small></span><span>⚫<small>Arang</small></span><span>💧<small>Air bersih</small></span></div>':''}`;
+  const lab=`<small>${PT[t][1]} ${PT[t][0]}</small>`;
+  if(!p)return `<div>${water}<div class="pcard">${lab}<br><b>Kosong, pilih benih:</b><div class="row" style="margin-top:4px">${PT[t][3].map(k=>`<button title="${F[k].n}" onclick="stock(${i},'${k}')">${F[k].e}🪙${F[k].p}</button>`).join('')}</div></div></div>`;
+  return `<div>${water}<div class="pcard">${lab}<br><b>${f.n}</b> ${tag(f.r)}
+  <div class="row"><small>Tumbuh</small><div class="bar"><div id="pb${i}" style="width:${p.p}%"></div></div></div>
+  <div class="row"><small>Air 💧</small><div class="bar"><div id="pw${i}" style="width:${p.wq}%;background:#2f9bd6"></div></div></div>
+  <small id="pf${i}">${p.fed>0?'Sedang makan 😋':'Lapar! Beri pakan'}</small>
+  <div class="row"><button onclick="feedPond(${i})">🍤</button><button onclick="chWater(${i})">💧 Ganti air 🪙5</button><button id="ph${i}" ${p.p<100?'disabled':''} onclick="harvest(${i})">Panen 🪙${price(f)}</button></div>
+  <details><summary>Cara budidaya</summary><small>${f.b}</small></details></div></div>`}).join('');
+ return h+'</div>'}
+function buyPond(t){if(!spend(PC[S.pn]+PT[t][2]))return;S.pt[S.pn]=t;S.pn++;toast(PT[t][0]+' siap! 🏞️');render()}
+function buyAer(){if(!spend(300))return;S.aer=1;render()}
+function buyNet(){if(!spend(250))return;S.net=1;toast('Jaring terpasang 🥅');render()}
+function buyAuto(){if(!spend(400))return;S.auto=1;toast('Feeder otomatis aktif 🤖');render()}
+function chWater(i){if(!spend(5))return;S.pond[i].wq=100;splash();render()}
+function stock(i,k){if(!spend(F[k].p))return;S.pond[i]={sp:k,p:0,fed:0,wq:100};info(k,'Ditebar:');render()}
+function feedPond(i){if(S.food<1)return toast('Pakan habis. Beli di Toko!');S.food--;S.pond[i].fed=40;render()}
+function harvest(i){const p=S.pond[i],g=price(F[p.sp]);S.coin+=g;S.harv=(S.harv||0)+1;S.pond[i]=null;ding();toast(`Panen ${F[p.sp].n}! +🪙${g}`);render()}
+const QS=[['🐟','Punya 5 ikan di akuarium',()=>S.fish.length>=5,50],['🌈','Punya 4 spesies berbeda',()=>new Set(S.fish.map(f=>f.sp)).size>=4,120],['💎','Punya ikan Rare ke atas',()=>S.fish.some(f=>F[f.sp].r>=2),150],['🥚','Breeding pertama',()=>(S.brd||0)>=1,80],['🦐','Panen 3 kali',()=>(S.harv||0)>=3,100],['🧠','Jawab 5 kuis dengan benar',()=>(S.qc||0)>=5,100],['🎮','Main 5 mini-game',()=>(S.games||0)>=5,120],['🏞️','Punya 4 kolam tambak',()=>S.pn>=4,200]];
+function vQuest(){return `<div class="card"><h2>🏆 Misi</h2><p>Selesaikan misi, lalu klaim hadiah koinnya!</p></div><div class="grid">${QS.map((q,i)=>{const ok=q[2](),c=S.cl.includes(i);return `<div class="card"><div class="big">${q[0]}</div><b>${q[1]}</b><br>${c?'<button disabled>✅ Diklaim</button>':`<button ${ok?'':'disabled'} onclick="claim(${i})">${ok?'Klaim':'Belum'} 🪙${q[3]}</button>`}</div>`}).join('')}</div>`}
+function claim(i){S.cl.push(i);S.coin+=QS[i][3];ding();toast('Misi selesai! 🎉');render()}
+function vLearn(){
+ let h=`<div class="card"><h2>📚 Ensiklopedia & Kuis</h2><p>Belajar dulu, lalu jawab kuis untuk dapat 🪙30 per jawaban benar. Benar beruntun: ${S.quiz}</p>`;
+ if(!q)h+=`<button onclick="newQ()">Mulai kuis</button>`;else h+=`<b>${q.t}</b><div class="row" style="margin-top:8px">${q.o.map(o=>`<button onclick="ans('${o.replace(/'/g,"\\'")}')">${o}</button>`).join('')}</div>`;
+ return h+`</div><div class="grid">${Object.keys(F).map(k=>card(k,'')).join('')}</div>`}
+function newQ(){const ks=Object.keys(F),k=ks[Math.random()*ks.length|0],type=Math.random()<.5;
+ const pool=ks.filter(x=>x!==k).sort(()=>Math.random()-.5).slice(0,2);
+ const key=type?'s':'o';q={a:F[k][key],t:type?`Apa nama ilmiah ${F[k].n}?`:`Dari mana asal ${F[k].n}?`,o:[k,...pool].map(x=>F[x][key]).sort(()=>Math.random()-.5)};render()}
+function ans(o){if(o===q.a){S.coin+=30;S.quiz++;S.qc=(S.qc||0)+1;toast('Benar! +🪙30 🎉')}else{S.quiz=0;toast('Kurang tepat. Jawabannya: '+q.a)}q=null;render()}
+
+function vGacha(){
+ return `<div class="card" style="text-align:center"><div class="big">🎰</div><h2>Gacha Ikan Hias</h2><p>Satu putar 🪙100. Peluang: Common 55% · Uncommon 25% · Rare 12% · Super Rare 6% · Legendary 2%.<br><small>Jika akuarium penuh, ikan otomatis dijual.</small></p>
+ <button onclick="gacha()">Putar! 🪙100</button><div id="gres" class="big" style="margin-top:12px"></div></div>`}
+function gacha(){if(!spend(100))return;let r=Math.random()*100,t=r<55?0:r<80?1:r<92?2:r<98?3:4;
+ let pool=Object.keys(F).filter(k=>F[k].t==='h'&&F[k].r===t);if(!pool.length)pool=Object.keys(F).filter(k=>F[k].t==='h'&&F[k].r===Math.max(0,t-1));
+ const k=pool[Math.random()*pool.length|0];
+ if(!addFish(k)){S.coin+=Math.round(F[k].p/2)}render();info(k,'Gacha dapat:')}
+
+setInterval(()=>{
+ let t=(tick.n=(tick.n||0)+1);
+ S.fish.forEach(f=>{if(t%2===0&&f.hunger>0)f.hunger--;const b=document.getElementById('hb'+f.id);if(b)b.style.width=f.hunger+'%'});
+ if(t%5===0){S.coin+=S.fish.filter(f=>f.hunger>0).reduce((a,f)=>a+INC[F[f.sp].r],0)}
+ if(S.rain>0&&--S.rain===0)toast('☀️ Hujan reda');S.pond.forEach((p,i)=>{if(!p)return;
+  p.wq=Math.max(0,p.wq-(S.aer?.1:.25)*(ptype(i)==='ras'?.2:1)-(p.fed>0?.1:0)-(S.rain>0?.4:0));if(S.auto&&p.fed<=0&&p.p<100&&S.food>0){S.food--;p.fed=40}
+  if(p.fed>0&&p.p<100){p.fed--;p.p=Math.min(100,p.p+(p.wq>40?2.5:1))}
+  const b=document.getElementById('pb'+i);if(b){b.style.width=p.p+'%';document.getElementById('pw'+i).style.width=p.wq+'%';document.getElementById('pm'+i).style.opacity=(100-p.wq)/120;
+   document.getElementById('pf'+i).textContent=p.fed>0?'Sedang makan 😋':(p.p>=100?'Siap panen! 🎉':(p.wq<40?'Air keruh! Ganti air 💧':'Lapar! Beri pakan'));document.getElementById('ph'+i).disabled=p.p<100;
+   document.querySelectorAll(`[data-pf="${i}"]`).forEach(e=>e.style.fontSize=(1+p.p/60)+'rem')}});
+ $('#stats').innerHTML=`<span class="pill">🪙 ${Math.floor(S.coin)}</span><span class="pill">🍤 Pakan ${S.food}</span><span class="pill">🐟 ${S.fish.length}/${CAP}</span>`;
+ if(t%5===0)save();
+},1000);
+function tick(){}
+setInterval(()=>{if(!S.rain&&Math.random()<.4){S.rain=30;toast('🌧️ Hujan turun! Air tambak cepat keruh');if(tab==='pond')render()}},50000);
+setInterval(()=>{if(tab!=='pond'||S.net||document.hidden||!S.pond.some(p=>p))return;const b=document.createElement('div');b.className='tgt';b.textContent='🐦';b.style.cssText='position:fixed;z-index:7;top:'+(15+Math.random()*50)+'%;font-size:3rem';b.style.setProperty('--t','4.5s');let hit=0;
+ b.onpointerdown=()=>{hit=1;S.coin+=5;ding();toast('Burung kabur! +🪙5');b.remove()};
+ b.onanimationend=()=>{b.remove();if(hit)return;const ps=S.pond.filter(p=>p);if(!ps.length)return;ps[Math.random()*ps.length|0].p*=.75;buzz();toast('🐦 Burung mencuri ikan! Pertumbuhan −25%');render()};document.body.appendChild(b)},35000);
+setInterval(()=>{S.mk=+(.8+Math.random()*.7).toFixed(2);if(tab==='pond')render();else toast('📊 Harga pasar tambak: ×'+S.mk)},60000);
+
+/* ===== AUDIO (dibuat langsung dengan Web Audio, tanpa file mp3) ===== */
+const A={ctx:null,on:localStorage.getItem('akuarium_snd')!=='0'};
+const hz=m=>440*Math.pow(2,(m-69)/12);
+function initAudio(){
+ if(A.ctx||!A.on)return;
+ const C=window.AudioContext||window.webkitAudioContext;if(!C)return;
+ const c=A.ctx=new C();
+ A.master=c.createGain();A.master.gain.value=.6;A.master.connect(c.destination);
+ A.music=c.createGain();A.music.gain.value=.2;
+ const d=c.createDelay(1);d.delayTime.value=.45;const fb=c.createGain();fb.gain.value=.4;
+ const lp=c.createBiquadFilter();lp.type='lowpass';lp.frequency.value=1800;
+ A.music.connect(A.master);A.music.connect(d);d.connect(lp);lp.connect(fb);fb.connect(d);lp.connect(A.master);
+ A.sfx=c.createGain();A.sfx.gain.value=.7;A.sfx.connect(A.master);
+ A.next=c.currentTime+.2;A.bar=0;
+ setInterval(()=>{if(c.state==='running'&&c.currentTime+1>A.next){playBar(A.next);A.next+=THM[A.theme||'aq'].len;A.bar++}},300);
+}
+const CH=[[48,55,59,64],[45,52,60,64],[41,53,57,64],[43,50,59,62]];
+const PENT=[72,74,76,79,81,84];
+function tone(m,t,dur,type,vol,att,dest){
+ const c=A.ctx,o=c.createOscillator(),g=c.createGain();o.type=type;o.frequency.value=hz(m);
+ g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(vol,t+att);g.gain.exponentialRampToValueAtTime(.0001,t+dur);
+ o.connect(g);g.connect(dest);o.start(t);o.stop(t+dur+.1)}
+const THM={
+aq:{ch:CH,pl:PENT,len:6,n:4,pv:.18,pt:'triangle',pd:2.4},
+job:{ch:[[48,55,64,67],[53,60,64,69],[55,62,67,71],[48,55,64,67]],pl:[72,74,76,79,81,84,88],len:3,n:6,pv:.1,pt:'triangle',pd:1},
+shop:{ch:[[50,57,60,64],[43,50,59,65],[48,55,59,64],[45,52,60,67]],pl:[74,77,79,81,84],len:5,n:4,pv:.14,pt:'sine',pd:1.8},
+pond:{ch:[[45,52,57,60],[41,48,57,60],[43,50,55,62],[40,47,52,59]],pl:[64,67,69,72,76],len:7,n:3,pv:.2,pt:'triangle',pd:3},
+learn:{ch:[[48,55,59,64],[43,50,59,62],[45,52,60,64],[41,48,57,64]],pl:[76,79,81,84],len:6,n:2,pv:.14,pt:'sine',pd:3},
+gacha:{ch:[[45,52,57,60],[48,55,60,64],[43,50,55,59],[41,48,53,60]],pl:[72,76,79,84,88,91],len:2.5,n:7,pv:.1,pt:'triangle',pd:.7}};
+function playBar(t){
+ const th=THM[A.theme||'aq'],ch=th.ch[A.bar%4];
+ ch.forEach(m=>tone(m,t,th.len+1.2,th.pt,th.pv,Math.min(1.8,th.len/3),A.music));
+ tone(ch[0]-12,t,th.len,'sine',.3,.6,A.music);
+ for(let i=0;i<th.n;i++)tone(th.pl[Math.random()*th.pl.length|0],t+.2+Math.random()*(th.len-.8),th.pd,'sine',.16,.02,A.music)}
+function noise(t,dur,f0,f1,vol){
+ const c=A.ctx,b=c.createBuffer(1,c.sampleRate*dur,c.sampleRate),d=b.getChannelData(0);
+ for(let i=0;i<d.length;i++)d[i]=(Math.random()*2-1)*(1-i/d.length);
+ const s=c.createBufferSource();s.buffer=b;
+ const f=c.createBiquadFilter();f.type='bandpass';f.Q.value=.8;f.frequency.setValueAtTime(f0,t);f.frequency.exponentialRampToValueAtTime(f1,t+dur);
+ const g=c.createGain();g.gain.setValueAtTime(vol,t);g.gain.exponentialRampToValueAtTime(.001,t+dur);
+ s.connect(f);f.connect(g);g.connect(A.sfx);s.start(t)}
+function splash(){if(!A.ctx||!A.on)return;const t=A.ctx.currentTime;noise(t,.45,2200,500,.8);
+ const o=A.ctx.createOscillator(),g=A.ctx.createGain();o.frequency.setValueAtTime(420,t);o.frequency.exponentialRampToValueAtTime(110,t+.2);
+ g.gain.setValueAtTime(.25,t);g.gain.exponentialRampToValueAtTime(.001,t+.25);o.connect(g);g.connect(A.sfx);o.start(t);o.stop(t+.3)}
+function blub(){if(!A.ctx||!A.on)return;const t=A.ctx.currentTime;
+ [0,.11,.22].forEach((d,i)=>{const o=A.ctx.createOscillator(),g=A.ctx.createGain();
+  o.frequency.setValueAtTime(300+i*90,t+d);o.frequency.exponentialRampToValueAtTime(800+i*150,t+d+.1);
+  g.gain.setValueAtTime(.3,t+d);g.gain.exponentialRampToValueAtTime(.001,t+d+.12);o.connect(g);g.connect(A.sfx);o.start(t+d);o.stop(t+d+.15)})}
+function toggleSnd(){
+ A.on=!A.on;localStorage.setItem('akuarium_snd',A.on?'1':'0');
+ if(A.on&&!A.ctx)initAudio();
+ if(A.ctx){A.master.gain.value=A.on?.6:0;A.on?A.ctx.resume():0}
+ sndBtn()}
+function sndBtn(){$('#snd').textContent=A.on?'🔊 Musik':'🔇 Senyap'}
+['pointerdown','keydown'].forEach(ev=>document.addEventListener(ev,()=>{initAudio();if(A.ctx&&A.ctx.state==='suspended'&&A.on)A.ctx.resume()},{passive:true}));
+document.addEventListener('click',e=>{if(e.target.closest('button')&&e.target.id!=='snd')splash()});
+document.addEventListener('visibilitychange',()=>{if(!A.ctx)return;document.hidden?A.ctx.suspend():(A.on&&A.ctx.resume())});
+
+/* ===== Interaksi ikan & air ===== */
+function pet(id,el,e){
+ e.stopPropagation();blub();
+ const f=S.fish.find(x=>x.id===id);
+ el.classList.add('happy');clearTimeout(el._t);el._t=setTimeout(()=>el.classList.remove('happy'),4000);
+ const tank=el.parentNode,r=el.getBoundingClientRect(),tr=tank.getBoundingClientRect();
+ const h=document.createElement('div');h.className='heart';h.textContent=f.hunger>0?'💕':'💧';
+ h.style.left=(r.left-tr.left+r.width/2-10)+'px';h.style.top=(r.top-tr.top-10)+'px';tank.appendChild(h);setTimeout(()=>h.remove(),1000);
+ if(Math.random()<.3)toast(f.hunger>0?`${f.name} senang main sama kamu! 🫧`:`${f.name} lapar... 🥺`)}
+function ripple(e,tank){
+ const tr=tank.getBoundingClientRect(),r=document.createElement('div');r.className='ripple';
+ r.style.left=(e.clientX-tr.left)+'px';r.style.top=(e.clientY-tr.top)+'px';tank.appendChild(r);setTimeout(()=>r.remove(),600);splash()}
+function ding(){if(!A.ctx||!A.on)return;const t=A.ctx.currentTime;tone(84,t,.35,'sine',.3,.01,A.sfx);tone(91,t+.08,.45,'sine',.25,.01,A.sfx)}
+function buzz(){if(!A.ctx||!A.on)return;tone(40,A.ctx.currentTime,.25,'triangle',.4,.01,A.sfx)}
+sndBtn();
+render();
+</script>
+</body>
+</html>
